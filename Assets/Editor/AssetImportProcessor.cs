@@ -4,7 +4,7 @@ using UnityEditor;
 using UnityEditor.Animations;
 using UnityEngine;
 
-namespace kmty.importer {
+namespace kmty.anim {
     public class AssetImportTester : AssetPostprocessor {
         private const string PREFAB_DESTINATION_DIRECTORY = "Assets/Prefabs/";
         private const string ANIMATOR_DESTINATION_DIRECTORY = "Assets/Animator/";
@@ -39,9 +39,9 @@ namespace kmty.importer {
                 var model = AssetDatabase.LoadAssetAtPath(path_imp, typeof(GameObject)) as GameObject;
                 var tmpgo = PrefabUtility.InstantiatePrefab(model) as GameObject;
 
-                AnimatorController controller;
+                UnityEditor.Animations.AnimatorController controller;
                 Animator animator = tmpgo.GetComponent<Animator>();
-                if (tmpgo.GetComponent<AnimationController>() == null) tmpgo.AddComponent<AnimationController>();
+                if (tmpgo.GetComponent<kmty.anim.AnimationController>() == null) tmpgo.AddComponent<AnimationController>();
                 if (animator == null) animator = tmpgo.AddComponent<Animator>();
                 if (animator.runtimeAnimatorController == null) {
                     controller = CreateAnimationController(tmpgo);
@@ -76,7 +76,7 @@ namespace kmty.importer {
             }
         }
 
-        static AnimatorController CreateAnimationController(GameObject modelAsset) {
+        static UnityEditor.Animations.AnimatorController CreateAnimationController(GameObject modelAsset) {
             string path = ANIMATOR_DESTINATION_DIRECTORY + modelAsset.name + ".controller";
             return AnimatorController.CreateAnimatorControllerAtPath(path);
         }
