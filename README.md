@@ -1,4 +1,5 @@
 # unity-fbx-importer
+unity fbx importer instantaneously arrange everything needed for animation
 
 ## Update Info
 - Previous version puts error on unity2018.3 or later, but now adopts for.
