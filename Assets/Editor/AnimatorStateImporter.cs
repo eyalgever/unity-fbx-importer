@@ -16,8 +16,7 @@ public class AnimatorStateImporter : Editor {
     public bool isClearOnStartUp { get; set; }
     public bool isOverwrite { get; set; }
 
-    public void Alignment()
-    {
+    public void Alignment() {
         if (rootStateMachine == null)
             return;
 
@@ -25,8 +24,7 @@ public class AnimatorStateImporter : Editor {
         var childStates = rootStateMachine.states;
 
         Vector3 position = Vector3.zero;
-        for (int i = 0; i < childStates.Length; i++)
-        {
+        for (int i = 0; i < childStates.Length; i++) {
             position.x = i % 5 * 210;
             position.y = yOffset + i / 5 * 50;
 
@@ -38,8 +36,7 @@ public class AnimatorStateImporter : Editor {
         rootStateMachine.states = childStates;
     }
 
-    public bool Import()
-    {
+    public bool Import() {
         if (controller == null)
             return false;
 
@@ -49,11 +46,9 @@ public class AnimatorStateImporter : Editor {
         rootStateMachine = controller.layers[0].stateMachine;
         states = rootStateMachine.states;
 
-        if (isClearOnStartUp == true)
-        {
+        if (isClearOnStartUp == true) {
             // Clear States
-            for (int i = 0; i < states.Length; i++)
-            {
+            for (int i = 0; i < states.Length; i++) {
                 rootStateMachine.RemoveState(states[i].state);
             }
         }
@@ -88,8 +83,7 @@ public class AnimatorStateImporter : Editor {
 
         List<string> directories = null;
 
-        if (directory != null)
-        {
+        if (directory != null) {
             directories = new List<string>();
             string selectionPath = AssetDatabase.GetAssetPath(directory);
 
@@ -100,18 +94,15 @@ public class AnimatorStateImporter : Editor {
 
             var guids = AssetDatabase.FindAssets("t:Model", directories.ToArray());
 
-            foreach (var guid in guids)
-            {
+            foreach (var guid in guids) {
                 string assetPath = AssetDatabase.GUIDToAssetPath(guid);
                 InsertFbxAnimationClips(assetPath);
             }
             return true;
         }
 
-        if (fbxFiles != null)
-        {
-            for (int i = 0; i < fbxFiles.Length; i++)
-            {
+        if (fbxFiles != null) {
+            for (int i = 0; i < fbxFiles.Length; i++) {
                 var fbx = fbxFiles[i];
                 var assetPath = AssetDatabase.GetAssetPath(fbx);
                 InsertFbxAnimationClips(assetPath);
@@ -122,12 +113,9 @@ public class AnimatorStateImporter : Editor {
         return false;
     }
 
-    AnimatorState FindReadyState()
-    {
-        for (int i = 0; i < states.Length; i++)
-        {
-            if (states[i].state.name.Equals("Ready"))
-            {
+    AnimatorState FindReadyState() {
+        for (int i = 0; i < states.Length; i++) {
+            if (states[i].state.name.Equals("Ready")) {
                 return states[i].state;
             }
         }
@@ -135,37 +123,29 @@ public class AnimatorStateImporter : Editor {
         return null;
     }
 
-    void InsertFbxAnimationClips(string fbxAssetPath)
-    {
+    void InsertFbxAnimationClips(string fbxAssetPath) {
         Object[] objects = AssetDatabase.LoadAllAssetsAtPath(fbxAssetPath);
-        foreach (Object obj in objects)
-        {
+        foreach (Object obj in objects) {
             AnimationClip clip = obj as AnimationClip;
-            if (clip != null && clip.name.Contains("_preview") == false)
-            {
+            if (clip != null && clip.name.Contains("_preview") == false) {
                 InsertAnimationClip(clip);
             }
         }
     }
 
-    bool InsertAnimationClip(AnimationClip clip)
-    {
+    bool InsertAnimationClip(AnimationClip clip) {
         if (clip == null)
             return false;
 
         var duplicateAnimation = GetDuplicatedAnimation(clip.name, states);
 
-        if (isOverwrite == true)
-        {
-            if (duplicateAnimation != null)
-            {
+        if (isOverwrite == true) {
+            if (duplicateAnimation != null) {
                 duplicateAnimation.motion = clip;
                 Debug.Log("<color=White>overwrite clip : " + clip + "</color>");
                 return false;
             }
-        }
-        else
-        {
+        } else {
             if (duplicateAnimation != null)
                 return false;
         }
@@ -178,10 +158,8 @@ public class AnimatorStateImporter : Editor {
         return true;
     }
 
-    AnimatorState GetDuplicatedAnimation(string newClipName, ChildAnimatorState[] states)
-    {
-        for (int i = 0; i < states.Length; i++)
-        {
+    AnimatorState GetDuplicatedAnimation(string newClipName, ChildAnimatorState[] states) {
+        for (int i = 0; i < states.Length; i++) {
             if (newClipName.Equals(states[i].state.name))
                 return states[i].state;
         }
