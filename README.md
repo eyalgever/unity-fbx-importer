@@ -1,4 +1,4 @@
-# unity-animation-importer
+# unity-fbx-importer
 
 ## Update Info
 - Previous version puts error on unity2018.3 or later, but now adopts for.
